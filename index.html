@@ -1,0 +1,2043 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InovaGear Industries - Sistema Contable Inteligente</title>
+    <style>
+        /* ===== VARIABLES Y ESTILOS GENERALES ===== */
+        :root {
+            --primary-blue: #1e3c72;
+            --secondary-blue: #2a5298;
+            --success-green: #28a745;
+            --warning-orange: #ffc107;
+            --danger-red: #dc3545;
+            --info-teal: #17a2b8;
+            --dark-gray: #343a40;
+            --light-gray: #f8f9fa;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--secondary-blue) 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* ===== ENCABEZADO ===== */
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+            .header h1 {
+                font-size: 2.2em;
+                margin-bottom: 10px;
+                text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            }
+
+            .header p {
+                font-size: 1.1em;
+                opacity: 0.9;
+                margin-bottom: 15px;
+            }
+
+        .connection-status {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            background: var(--success-green);
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        /* ===== REGISTRO CONTABLE ===== */
+        .panel-registro-contable {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-left: 6px solid #28a745;
+        }
+
+        .resumen-financiero {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .resumen-card {
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .saldo-empresa {
+            font-size: 2.2em;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        /* ===== PANEL DE TRANSFERENCIA Y CONTRATO ===== */
+        .panel-transferencia-contrato {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .seccion-contrato {
+            background: #fff3cd;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--warning-orange);
+        }
+
+        .form-transferencia {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        /* ===== SISTEMA DE EVIDENCIAS ===== */
+        .sistema-evidencias {
+            background: #e7f3ff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid var(--info-teal);
+        }
+
+        .upload-area {
+            border: 2px dashed #17a2b8;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            margin: 15px 0;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+            .upload-area:hover {
+                background: #e9ecef;
+                border-color: #138496;
+            }
+
+        .archivos-subidos {
+            margin-top: 15px;
+        }
+
+        .archivo-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+            margin: 5px 0;
+            border-left: 4px solid #17a2b8;
+        }
+
+        .notificacion {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #fdcb6e;
+        }
+
+        .notificacion-alerta {
+            background: #f8d7da;
+            border-color: #f5c6cb;
+            border-left-color: #e74c3c;
+        }
+
+        /* ===== PANEL DE BOTONES ===== */
+        .panel-principal {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .botones-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 25px;
+        }
+
+        .boton-sistema {
+            padding: 35px 20px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 180px;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+        }
+
+            .boton-sistema:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+            }
+
+        .boton-cuentas {
+            background: linear-gradient(135deg, var(--success-green), #20c997);
+            color: white;
+        }
+
+        .boton-analisis {
+            background: linear-gradient(135deg, var(--info-teal), #6f42c1);
+            color: white;
+        }
+
+        .boton-estados {
+            background: linear-gradient(135deg, #6c757d, var(--dark-gray));
+            color: white;
+        }
+
+        .icono-boton {
+            font-size: 2.8em;
+            margin-bottom: 15px;
+        }
+
+        .descripcion-boton {
+            font-size: 0.85em;
+            opacity: 0.9;
+            margin-top: 10px;
+            font-weight: normal;
+            line-height: 1.4;
+        }
+
+        /* ===== SECCIÓN INFORMATIVA ===== */
+        .info-seguridad {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            border-left: 5px solid var(--danger-red);
+        }
+
+            .info-seguridad h3 {
+                color: var(--danger-red);
+                margin-bottom: 15px;
+                text-align: center;
+            }
+
+        .caracteristicas-seguridad {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .caracteristica {
+            background: var(--light-gray);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border-left: 4px solid var(--info-teal);
+        }
+
+        /* ===== MODALES ===== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-contenido {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            max-width: 1000px;
+            width: 95%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .cerrar-modal {
+            float: right;
+            font-size: 1.5em;
+            cursor: pointer;
+            color: #666;
+        }
+
+        /* ===== FORMULARIOS ===== */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+            .form-group label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: bold;
+                color: var(--dark-gray);
+            }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border 0.3s ease;
+        }
+
+            .form-control:focus {
+                border-color: var(--primary-blue);
+                outline: none;
+                box-shadow: 0 0 5px rgba(30, 60, 114, 0.3);
+            }
+
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-blue);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success-green);
+            color: white;
+        }
+
+        .btn-warning {
+            background: var(--warning-orange);
+            color: #333;
+        }
+
+        .btn-danger {
+            background: var(--danger-red);
+            color: white;
+        }
+
+        .btn-info {
+            background: var(--info-teal);
+            color: white;
+        }
+
+        /* ===== TABLAS ===== */
+        .tabla-contenedor {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background: var(--dark-gray);
+            color: white;
+            font-weight: bold;
+        }
+
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* ===== HISTORIAL DE TRANSACCIONES ===== */
+        .historial-transacciones {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .transaccion-item {
+            padding: 15px;
+            border-left: 4px solid var(--success-green);
+            background: var(--light-gray);
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+
+        .transaccion-negativa {
+            border-left-color: var(--danger-red);
+        }
+
+        .transaccion-contrato {
+            border-left-color: var(--warning-orange);
+        }
+
+        /* ===== ESTADO CONTRATO ===== */
+        .estado-contrato {
+            background: #e7f3ff;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            border-left: 4px solid var(--info-teal);
+        }
+
+        .contrato-activo {
+            background: #fff3cd;
+            border-left: 4px solid var(--warning-orange);
+        }
+
+        .contrato-cumplido {
+            background: #d4edda;
+            border-left: 4px solid var(--success-green);
+        }
+
+        .contrato-fallido {
+            background: #f8d7da;
+            border-left: 4px solid var(--danger-red);
+        }
+
+        /* ===== INDICADORES FINANCIEROS ===== */
+        .indicadores-financieros {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .indicador {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            border-top: 4px solid;
+        }
+
+        .indicador-excelente {
+            border-top-color: #28a745;
+        }
+
+        .indicador-bueno {
+            border-top-color: #17a2b8;
+        }
+
+        .indicador-regular {
+            border-top-color: #ffc107;
+        }
+
+        .indicador-alerta {
+            border-top-color: #fd7e14;
+        }
+
+        .valor-indicador {
+            font-size: 2em;
+            font-weight: bold;
+            margin: 10px 0;
+            color: var(--dark-gray);
+        }
+
+        .tendencia {
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        .tendencia-positiva {
+            color: #28a745;
+        }
+
+        .tendencia-negativa {
+            color: #dc3545;
+        }
+
+        /* ===== CONTADOR DE TIEMPO ===== */
+        .contador-tiempo {
+            background: #fff3cd;
+            border-radius: 8px;
+            padding: 10px 15px;
+            margin: 10px 0;
+            text-align: center;
+            font-weight: bold;
+            border-left: 4px solid #f39c12;
+        }
+
+        .contador-urgente {
+            background: #f8d7da;
+            border-left-color: #e74c3c;
+            animation: pulse 1s infinite;
+        }
+
+        /* ===== APARTADO DE EVIDENCIAS ===== */
+        .apartado-evidencias {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-left: 6px solid var(--info-teal);
+        }
+
+        .enlace-acceso {
+            background: #e7f3ff;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid var(--info-teal);
+            word-break: break-all;
+        }
+
+        .codigo-acceso {
+            font-family: monospace;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+        }
+
+        /* ===== PÁGINA DE EVIDENCIAS ===== */
+        .pagina-evidencias {
+            background: var(--white);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 20px auto;
+            max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        /* ===== GRÁFICOS ===== */
+        .grafico-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .barra {
+            height: 30px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--secondary-blue));
+            border-radius: 5px;
+            margin: 10px 0;
+            transition: width 0.5s ease;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .botones-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-transferencia {
+                grid-template-columns: 1fr;
+            }
+
+            .resumen-financiero {
+                grid-template-columns: 1fr;
+            }
+
+            .boton-sistema {
+                min-height: 150px;
+                padding: 25px 15px;
+            }
+
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .indicadores-financieros {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ===== ANIMACIONES ===== */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .boton-sistema {
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes saldoUpdate {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .saldo-update {
+            animation: saldoUpdate 0.5s ease-in-out;
+        }
+
+        .saldo-negativo {
+            color: var(--danger-red);
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.7;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- PÁGINA PRINCIPAL DEL SISTEMA -->
+    <div id="paginaPrincipal" class="container">
+        <!-- ENCABEZADO PRINCIPAL -->
+        <div class="header">
+            <h1>🏭 InovaGear Industries - Sistema Contable Inteligente</h1>
+            <p>Plataforma integrada de gestión financiera con contratos inteligentes avanzados</p>
+            <div class="connection-status">Sistema Conectado ✅ | Contratos Activos</div>
+        </div>
+
+        <!-- REGISTRO CONTABLE PRINCIPAL -->
+        <div class="panel-registro-contable">
+            <h2>📊 Registro Contable - InovaGear Industries</h2>
+            <p>Estado financiero actual y registro de operaciones en tiempo real</p>
+
+            <div class="resumen-financiero">
+                <div class="resumen-card">
+                    <h3>💰 Saldo Disponible</h3>
+                    <div class="saldo-empresa" id="saldoInovaGear">$2,850,420.00</div>
+                    <div>Cuenta: 1001-001</div>
+                </div>
+
+                <div class="resumen-card" style="background: linear-gradient(135deg, #17a2b8, #6f42c1);">
+                    <h3>📈 Margen de Ganancia</h3>
+                    <div class="saldo-empresa">24.8%</div>
+                    <div>Rentabilidad Anual</div>
+                </div>
+
+                <div class="resumen-card" style="background: linear-gradient(135deg, #fd7e14, #e74c3c);">
+                    <h3>🚀 Capacidad Inversión</h3>
+                    <div class="saldo-empresa">$1,200,000.00</div>
+                    <div>Límite disponible</div>
+                </div>
+
+                <div class="resumen-card" style="background: linear-gradient(135deg, #6c757d, #495057);">
+                    <h3>📋 Transacciones</h3>
+                    <div class="saldo-empresa">47</div>
+                    <div>Este mes</div>
+                </div>
+            </div>
+
+            <!-- RESUMEN DE ÚLTIMAS TRANSACCIONES -->
+            <div class="tabla-contenedor" style="margin-top: 25px;">
+                <h3>🕒 Últimas Transacciones</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Descripción</th>
+                            <th>Tipo</th>
+                            <th>Monto</th>
+                            <th>Estado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>15/01/2024</td>
+                            <td>Venta equipos industriales</td>
+                            <td>Ingreso</td>
+                            <td style="color: #28a745;">+$45,000.00</td>
+                            <td>✅ Completado</td>
+                        </tr>
+                        <tr>
+                            <td>14/01/2024</td>
+                            <td>Pago proveedores</td>
+                            <td>Egreso</td>
+                            <td style="color: #dc3545;">-$12,500.00</td>
+                            <td>✅ Completado</td>
+                        </tr>
+                        <tr>
+                            <td>13/01/2024</td>
+                            <td>Contrato TechCorp Solutions</td>
+                            <td>Contrato</td>
+                            <td style="color: #ffc107;">$75,000.00</td>
+                            <td>⏳ Pendiente</td>
+                        </tr>
+                        <tr>
+                            <td>12/01/2024</td>
+                            <td>Inversión en I+D</td>
+                            <td>Inversión</td>
+                            <td style="color: #dc3545;">-$30,000.00</td>
+                            <td>✅ Completado</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- PANEL TRANSFERENCIA Y CONTRATO INTELIGENTE -->
+        <div class="panel-transferencia-contrato">
+            <h2>💸 Transferencias y Contratos Inteligentes</h2>
+            <p>Sistema integrado de transferencias con contratos inteligentes avanzados</p>
+
+            <!-- SECCIÓN DE TRANSFERENCIA -->
+            <div class="form-transferencia">
+                <div class="form-group">
+                    <label for="cuentaOrigen">Cuenta de Origen:</label>
+                    <select id="cuentaOrigen" class="form-control" onchange="actualizarSaldoOrigen()">
+                        <option value="">Seleccione cuenta origen</option>
+                        <option value="inovaGear">InovaGear Industries ($2,850,420.00)</option>
+                        <option value="techCorp">TechCorp Solutions ($450,000.00)</option>
+                        <option value="globalFood">GlobalFood Industries ($280,150.00)</option>
+                        <option value="urbanConstruct">UrbanConstruct Ltd ($890,750.00)</option>
+                        <option value="greenEnergy">GreenEnergy Partners ($1,250,000.00)</option>
+                        <option value="medLife">MedLife Healthcare ($675,300.00)</option>
+                        <option value="autoMasters">AutoMasters Group ($520,480.00)</option>
+                        <option value="financeSecure">FinanceSecure Bank ($3,150,200.00)</option>
+                        <option value="retailPlus">RetailPlus Stores ($385,600.00)</option>
+                        <option value="logisticsPro">LogisticsPro Inc ($745,900.00)</option>
+                        <option value="eduSmart">EduSmart Systems ($195,750.00)</option>
+                        <option value="banco">Banco General ($15,000,000,000.00)</option>
+                    </select>
+                    <div id="saldoActualOrigen" style="font-size: 0.9em; color: #666; margin-top: 5px;"></div>
+                </div>
+
+                <div class="form-group">
+                    <label for="cuentaDestino">Cuenta de Destino:</label>
+                    <select id="cuentaDestino" class="form-control">
+                        <option value="">Seleccione cuenta destino</option>
+                        <option value="inovaGear">InovaGear Industries</option>
+                        <option value="techCorp">TechCorp Solutions</option>
+                        <option value="globalFood">GlobalFood Industries</option>
+                        <option value="urbanConstruct">UrbanConstruct Ltd</option>
+                        <option value="greenEnergy">GreenEnergy Partners</option>
+                        <option value="medLife">MedLife Healthcare</option>
+                        <option value="autoMasters">AutoMasters Group</option>
+                        <option value="financeSecure">FinanceSecure Bank</option>
+                        <option value="retailPlus">RetailPlus Stores</option>
+                        <option value="logisticsPro">LogisticsPro Inc</option>
+                        <option value="eduSmart">EduSmart Systems</option>
+                        <option value="banco">Banco General</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="montoTransferencia">Monto a Transferir:</label>
+                    <input type="number" id="montoTransferencia" class="form-control" placeholder="0.00" min="0" step="0.01">
+                </div>
+
+                <div class="form-group">
+                    <label for="conceptoTransferencia">Concepto:</label>
+                    <input type="text" id="conceptoTransferencia" class="form-control" placeholder="Descripción de la transferencia">
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px;">
+                <button class="btn btn-primary" onclick="realizarTransferencia()">
+                    Realizar Transferencia Directa
+                </button>
+                <button class="btn btn-warning" onclick="mostrarSeccionContrato()">
+                     Crear Contrato Inteligente
+                </button>
+            </div>
+
+            <!-- SECCIÓN DE CONTRATO INTELIGENTE -->
+            <div id="seccionContrato" class="seccion-contrato" style="display: none;">
+                <h3>🔒 Contrato Inteligente Avanzado</h3>
+                <p>Los fondos se bloquearán hasta que se verifique el cumplimiento de condiciones</p>
+
+                <div class="form-group">
+                    <label for="condicionesContrato">Condiciones del Contrato:</label>
+                    <textarea id="condicionesContrato" class="form-control" rows="3" placeholder="Describa detalladamente las condiciones que deben cumplirse para liberar los fondos..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="fechaVencimientoContrato">Fecha de Vencimiento:</label>
+                    <input type="date" id="fechaVencimientoContrato" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label for="beneficiarioContrato">Beneficiario del Contrato:</label>
+                    <input type="text" id="beneficiarioContrato" class="form-control" placeholder="Nombre del beneficiario">
+                </div>
+
+                <div class="form-group">
+                    <label for="empresaBeneficiaria">Empresa Beneficiaria:</label>
+                    <input type="text" id="empresaBeneficiaria" class="form-control" placeholder="Nombre de la empresa beneficiaria">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px;">
+                    <button class="btn btn-success" onclick="crearContratoInteligente()">
+                        ✅ Crear y Bloquear Fondos
+                    </button>
+                    <button class="btn btn-info" onclick="ocultarSeccionContrato()">
+                        ❌ Cancelar
+                    </button>
+                </div>
+            </div>
+
+            <!-- ESTADO DE CONTRATO ACTIVO -->
+            <div id="estadoContratoActivo" class="estado-contrato contrato-activo" style="display: none;">
+                <h4>📄 Contrato Inteligente Activo</h4>
+                <div id="infoContratoActivo"></div>
+
+                <!-- CONTADOR DE TIEMPO -->
+                <div id="contadorTiempo" class="contador-tiempo" style="display: none;">
+                    ⏰ <span id="diasRestantes">10</span> días restantes para subir evidencias
+                </div>
+
+                <!-- ENLACES DE ACCESO PARA EMPRESAS -->
+                <div id="enlacesAcceso" style="display: none;">
+                    <h5>🔗 Enlaces de Acceso para Subir Evidencias</h5>
+                    <div class="enlace-acceso">
+                        <strong>Enlace para InovaGear Industries:</strong><br>
+                        <span id="enlaceInovaGear" class="codigo-acceso"></span>
+                        <button class="btn btn-sm btn-info" onclick="copiarEnlace('enlaceInovaGear')">📋 Copiar</button>
+                    </div>
+                    <div class="enlace-acceso">
+                        <strong>Enlace para Empresa Beneficiaria:</strong><br>
+                        <span id="enlaceEmpresaB" class="codigo-acceso"></span>
+                        <button class="btn btn-sm btn-info" onclick="copiarEnlace('enlaceEmpresaB')">📋 Copiar</button>
+                    </div>
+                    <div class="notificacion">
+                        <strong>📝 Nota:</strong> Estos enlaces llevan directamente a la página específica para subir evidencias del contrato.
+                    </div>
+                </div>
+
+                <!-- NOTIFICACIONES -->
+                <div id="notificacionesContrato">
+                    <!-- Notificaciones aparecerán aquí -->
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px;">
+                    <button class="btn btn-success" onclick="verificarCondicionesContrato()">
+                        🔍 Verificar Cumplimiento
+                    </button>
+                    <button class="btn btn-warning" onclick="abrirModal('modalEvidencias')">
+                        📎 Gestionar Evidencias
+                    </button>
+                    <button class="btn btn-info" onclick="notificarAmbasPartes()">
+                        📢 Notificar a Partes
+                    </button>
+                    <button class="btn btn-danger" onclick="cancelarContrato()">
+                        🗑️ Cancelar Contrato
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- HISTORIAL DE TRANSACCIONES Y CONTRATOS -->
+        <div class="historial-transacciones">
+            <h2>📋 Historial de Operaciones</h2>
+            <div id="listaTransacciones">
+                <div class="transaccion-item">
+                    <strong>01/01/2024 - Asiento de Apertura</strong><br>
+                    <span>InovaGear Industries: +$2,850,420.00 | Capital inicial</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- PANEL DE BOTONES PRINCIPALES -->
+        <div class="panel-principal">
+            <h2>Módulos del Sistema</h2>
+            <p>Seleccione el módulo que desea utilizar</p>
+
+            <div class="botones-grid">
+                <!-- Botón para Cuentas T -->
+                <button class="boton-sistema boton-cuentas" onclick="abrirModal('modalCuentas')">
+                    <div class="icono-boton">📊</div>
+                    <div>Sistema Contable</div>
+                    <div class="descripcion-boton">
+                        Cuentas T completas con registro formal de transacciones
+                    </div>
+                </button>
+
+                <!-- Botón para Análisis Financiero -->
+                <button class="boton-sistema boton-analisis" onclick="abrirModal('modalAnalisis')">
+                    <div class="icono-boton">📈</div>
+                    <div>Análisis Financiero</div>
+                    <div class="descripcion-boton">
+                        Indicadores clave y análisis de rendimiento financiero
+                    </div>
+                </button>
+
+                <!-- Botón para Estados Financieros -->
+                <button class="boton-sistema boton-estados" onclick="abrirModal('modalEstados')">
+                    <div class="icono-boton">📋</div>
+                    <div>Estados Financieros</div>
+                    <div class="descripcion-boton">
+                        Generación de balances y estados de resultados formales
+                    </div>
+                </button>
+            </div>
+        </div>
+
+        <!-- BOTÓN DE ADMINISTRACIÓN PELIGROSO -->
+        <div style="text-align: center; margin: 20px 0;">
+            <button class="btn btn-danger" onclick="abrirModal('modalAdmin')">
+                🚨 Administración del Sistema
+            </button>
+        </div>
+
+        <!-- INFORMACIÓN DE SEGURIDAD -->
+        <div class="info-seguridad">
+            <h3>🛡️ Sistema de Seguridad con Contratos Inteligentes Avanzados</h3>
+            <p>Protección completa con verificación de evidencias y notificaciones automáticas</p>
+
+            <div class="caracteristicas-seguridad">
+                <div class="caracteristica">
+                    <strong>🔐 Bloqueo Automático</strong>
+                    <p>Fondos bloqueados hasta verificación completa</p>
+                </div>
+                <div class="caracteristica">
+                    <strong>📎 Sistema de Evidencias</strong>
+                    <p>Subida de documentos para verificación</p>
+                </div>
+                <div class="caracteristica">
+                    <strong>⏰ Plazos Controlados</strong>
+                    <p>10 días para corrección en caso de fallo</p>
+                </div>
+                <div class="caracteristica">
+                    <strong>📢 Notificaciones</strong>
+                    <p>Comunicación automática a ambas partes</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PÁGINA ESPECÍFICA PARA SUBIR EVIDENCIAS -->
+    <div id="paginaEvidencias" class="pagina-evidencias" style="display: none;">
+        <div class="header" style="background: var(--info-teal); margin-bottom: 20px;">
+            <h1>📎 Sistema de Evidencias del Contrato</h1>
+            <p>Suba los documentos que demuestren el cumplimiento del contrato</p>
+        </div>
+
+        <div id="infoContratoEvidencias"></div>
+
+        <!-- SISTEMA DE EVIDENCIAS -->
+        <div class="sistema-evidencias">
+            <h3>Subir Evidencias del Contrato</h3>
+            <p>Suba documentos que demuestren el cumplimiento del contrato</p>
+
+            <div class="upload-area" onclick="document.getElementById('fileUploadEvidencias').click()">
+                <div style="font-size: 3em;">📤</div>
+                <h4>Haga clic para subir evidencias</h4>
+                <p>Formatos aceptados: PDF, JPG, PNG, DOC (Máx. 10MB)</p>
+                <input type="file" id="fileUploadEvidencias" style="display: none;" onchange="subirEvidenciaPagina(this.files)">
+            </div>
+
+            <div class="archivos-subidos" id="listaArchivosPagina">
+                <!-- Archivos subidos aparecerán aquí -->
+            </div>
+        </div>
+
+        <div class="notificacion" style="margin-top: 20px;">
+            <strong>ℹ️ Información importante:</strong><br>
+            - Todas las evidencias subidas serán verificadas para el cumplimiento del contrato<br>
+            - Puede subir múltiples archivos según sea necesario<br>
+            - Los archivos deben ser legibles y relevantes para el contrato
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <button class="btn btn-primary" onclick="volverAlInicio()">
+                🏠 Volver al Inicio
+            </button>
+        </div>
+    </div>
+
+    <!-- MODALES -->
+    <!-- Modal Sistema Contable -->
+    <div id="modalCuentas" class="modal">
+        <div class="modal-contenido">
+            <span class="cerrar-modal" onclick="cerrarModal('modalCuentas')">&times;</span>
+            <h2>📊 Sistema Contable - Cuentas T</h2>
+            <p>Gestión completa de cuentas contables con registro formal</p>
+
+            <div class="tabla-contenedor">
+                <h3>Plan de Cuentas - InovaGear Industries</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nombre de Cuenta</th>
+                            <th>Tipo</th>
+                            <th>Saldo Actual</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1001</td>
+                            <td>Caja y Bancos</td>
+                            <td>Activo</td>
+                            <td>$2,850,420.00</td>
+                        </tr>
+                        <tr>
+                            <td>1101</td>
+                            <td>Cuentas por Cobrar</td>
+                            <td>Activo</td>
+                            <td>$450,000.00</td>
+                        </tr>
+                        <tr>
+                            <td>1201</td>
+                            <td>Inventarios</td>
+                            <td>Activo</td>
+                            <td>$890,750.00</td>
+                        </tr>
+                        <tr>
+                            <td>2001</td>
+                            <td>Cuentas por Pagar</td>
+                            <td>Pasivo</td>
+                            <td>$320,150.00</td>
+                        </tr>
+                        <tr>
+                            <td>3001</td>
+                            <td>Capital Social</td>
+                            <td>Patrimonio</td>
+                            <td>$3,500,000.00</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn btn-primary" onclick="cerrarModal('modalCuentas')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Análisis Financiero -->
+    <div id="modalAnalisis" class="modal">
+        <div class="modal-contenido">
+            <span class="cerrar-modal" onclick="cerrarModal('modalAnalisis')">&times;</span>
+            <h2>📈 Análisis Financiero</h2>
+            <p>Indicadores clave y análisis de rendimiento financiero</p>
+
+            <div class="indicadores-financieros">
+                <div class="indicador indicador-excelente">
+                    <h4>Liquidez Corriente</h4>
+                    <div class="valor-indicador">2.8</div>
+                    <div class="tendencia tendencia-positiva">↑ 0.2 vs mes anterior</div>
+                </div>
+                <div class="indicador indicador-bueno">
+                    <h4>Rentabilidad</h4>
+                    <div class="valor-indicador">24.8%</div>
+                    <div class="tendencia tendencia-positiva">↑ 3.2% vs trimestre anterior</div>
+                </div>
+                <div class="indicador indicador-regular">
+                    <h4>Endeudamiento</h4>
+                    <div class="valor-indicador">38.5%</div>
+                    <div class="tendencia tendencia-negativa">↑ 2.1% vs año anterior</div>
+                </div>
+                <div class="indicador indicador-alerta">
+                    <h4>Rotación Inventarios</h4>
+                    <div class="valor-indicador">4.2</div>
+                    <div class="tendencia tendencia-negativa">↓ 0.8 vs mes anterior</div>
+                </div>
+            </div>
+
+            <div class="grafico-container">
+                <h4>📊 Evolución de Indicadores</h4>
+                <div style="margin: 20px 0;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span>Liquidez</span>
+                        <div style="width: 60%; background: #f0f0f0; border-radius: 5px;">
+                            <div class="barra" style="width: 85%;"></div>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span>Rentabilidad</span>
+                        <div style="width: 60%; background: #f0f0f0; border-radius: 5px;">
+                            <div class="barra" style="width: 78%;"></div>
+                        </div>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span>Endeudamiento</span>
+                        <div style="width: 60%; background: #f0f0f0; border-radius: 5px;">
+                            <div class="barra" style="width: 65%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn btn-primary" onclick="cerrarModal('modalAnalisis')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Estados Financieros -->
+    <div id="modalEstados" class="modal">
+        <div class="modal-contenido">
+            <span class="cerrar-modal" onclick="cerrarModal('modalEstados')">&times;</span>
+            <h2>📋 Estados Financieros</h2>
+            <p>Generación de balances y estados de resultados formales</p>
+
+            <div class="tabla-contenedor">
+                <h3>Estado de Resultados - Enero 2024</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Concepto</th>
+                            <th>Monto</th>
+                            <th>%</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Ingresos por Ventas</strong></td>
+                            <td>$1,250,000.00</td>
+                            <td>100%</td>
+                        </tr>
+                        <tr>
+                            <td>Costo de Ventas</td>
+                            <td>-$750,000.00</td>
+                            <td>60%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Utilidad Bruta</strong></td>
+                            <td>$500,000.00</td>
+                            <td>40%</td>
+                        </tr>
+                        <tr>
+                            <td>Gastos Operativos</td>
+                            <td>-$250,000.00</td>
+                            <td>20%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Utilidad Neta</strong></td>
+                            <td>$250,000.00</td>
+                            <td>20%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="tabla-contenedor">
+                <h3>Balance General - Enero 2024</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cuenta</th>
+                            <th>Activo</th>
+                            <th>Pasivo</th>
+                            <th>Patrimonio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Total Activos</td>
+                            <td>$4,500,000.00</td>
+                            <td>-</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Total Pasivos</td>
+                            <td>-</td>
+                            <td>$1,200,000.00</td>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <td>Total Patrimonio</td>
+                            <td>-</td>
+                            <td>-</td>
+                            <td>$3,300,000.00</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Total</strong></td>
+                            <td><strong>$4,500,000.00</strong></td>
+                            <td><strong>$1,200,000.00</strong></td>
+                            <td><strong>$3,300,000.00</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn btn-primary" onclick="cerrarModal('modalEstados')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Administración -->
+    <div id="modalAdmin" class="modal">
+        <div class="modal-contenido">
+            <span class="cerrar-modal" onclick="cerrarModal('modalAdmin')">&times;</span>
+            <h2>🚨 Administración del Sistema</h2>
+            <p>Configuraciones avanzadas y controles administrativos</p>
+
+            <div class="notificacion notificacion-alerta">
+                <strong>⚠️ ZONA DE ADMINISTRACIÓN</strong><br>
+                Esta área contiene controles sensibles del sistema. Proceda con precaución.
+            </div>
+
+            <div class="form-group">
+                <label for="configBackup">Configuración de Backup:</label>
+                <select id="configBackup" class="form-control">
+                    <option value="diario">Backup Diario</option>
+                    <option value="semanal">Backup Semanal</option>
+                    <option value="mensual">Backup Mensual</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="nivelAuditoria">Nivel de Auditoría:</label>
+                <select id="nivelAuditoria" class="form-control">
+                    <option value="basico">Básico</option>
+                    <option value="medio">Medio</option>
+                    <option value="avanzado">Avanzado</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="seguridadNivel">Nivel de Seguridad:</label>
+                <select id="seguridadNivel" class="form-control">
+                    <option value="estandar">Estándar</option>
+                    <option value="alto">Alto</option>
+                    <option value="maximo">Máximo</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="retencionDatos">Retención de Datos:</label>
+                <select id="retencionDatos" class="form-control">
+                    <option value="1año">1 Año</option>
+                    <option value="3años">3 Años</option>
+                    <option value="5años">5 Años</option>
+                    <option value="indefinido">Indefinido</option>
+                </select>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-success" onclick="guardarConfiguracion()">Guardar Configuración</button>
+                <button class="btn btn-danger" onclick="realizarBackup()">Realizar Backup</button>
+                <button class="btn btn-warning" onclick="generarReporte()">Generar Reporte</button>
+                <button class="btn btn-info" onclick="exportarDatos()">Exportar Datos</button>
+            </div>
+
+            <div class="notificacion" style="margin-top: 20px;">
+                <strong>📊 Estadísticas del Sistema:</strong><br>
+                - Usuarios activos: 12<br>
+                - Contratos en proceso: 5<br>
+                - Espacio utilizado: 2.3 GB / 10 GB<br>
+                - Último backup: Hoy 08:00 AM
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn btn-primary" onclick="cerrarModal('modalAdmin')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Evidencias -->
+    <div id="modalEvidencias" class="modal">
+        <div class="modal-contenido">
+            <span class="cerrar-modal" onclick="cerrarModal('modalEvidencias')">&times;</span>
+            <h2>📎 Gestión de Evidencias del Contrato</h2>
+
+            <div class="sistema-evidencias">
+                <h4>Subir Evidencias</h4>
+                <p>Suba documentos que demuestren el cumplimiento del contrato</p>
+
+                <div class="upload-area" onclick="document.getElementById('fileUploadModal').click()">
+                    <div style="font-size: 3em;">📤</div>
+                    <h4>Haga clic para subir evidencias</h4>
+                    <p>Formatos aceptados: PDF, JPG, PNG, DOC (Máx. 10MB)</p>
+                    <input type="file" id="fileUploadModal" style="display: none;" onchange="subirEvidenciaModal(this.files)">
+                </div>
+
+                <div class="archivos-subidos" id="listaArchivosModal">
+                    <!-- Archivos subidos aparecerán aquí -->
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn btn-primary" onclick="cerrarModal('modalEvidencias')">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ===== SISTEMA DE CUENTAS Y TRANSFERENCIAS =====
+        let cuentas = {
+            inovaGear: { nombre: "InovaGear Industries", saldo: 2850420.00, numero: "1001-001" },
+            techCorp: { nombre: "TechCorp Solutions", saldo: 450000.00, numero: "2001-001" },
+            globalFood: { nombre: "GlobalFood Industries", saldo: 280150.00, numero: "2001-002" },
+            urbanConstruct: { nombre: "UrbanConstruct Ltd", saldo: 890750.00, numero: "2001-003" },
+            greenEnergy: { nombre: "GreenEnergy Partners", saldo: 1250000.00, numero: "2001-004" },
+            medLife: { nombre: "MedLife Healthcare", saldo: 675300.00, numero: "2001-005" },
+            autoMasters: { nombre: "AutoMasters Group", saldo: 520480.00, numero: "2001-006" },
+            financeSecure: { nombre: "FinanceSecure Bank", saldo: 3150200.00, numero: "2001-007" },
+            retailPlus: { nombre: "RetailPlus Stores", saldo: 385600.00, numero: "2001-008" },
+            logisticsPro: { nombre: "LogisticsPro Inc", saldo: 745900.00, numero: "2001-009" },
+            eduSmart: { nombre: "EduSmart Systems", saldo: 195750.00, numero: "2001-010" },
+            banco: { nombre: "Banco General", saldo: 15000000000.00, numero: "9999-001" }
+        };
+
+        let historialTransacciones = [
+            { fecha: "01/01/2024", descripcion: "Asiento de Apertura", tipo: "sistema", detalles: "InovaGear Industries: +$2,850,420.00 | Capital inicial" }
+        ];
+
+        let contratoActivo = null;
+        let fondosBloqueados = 0;
+        let diasRestantes = 10;
+        let intentosVerificacion = 0;
+
+        // ===== FUNCIONES DE TRANSFERENCIA =====
+        function realizarTransferencia() {
+            const cuentaOrigen = document.getElementById('cuentaOrigen').value;
+            const cuentaDestino = document.getElementById('cuentaDestino').value;
+            const monto = parseFloat(document.getElementById('montoTransferencia').value);
+            const concepto = document.getElementById('conceptoTransferencia').value;
+
+            // Validaciones
+            if (!cuentaOrigen || !cuentaDestino || !monto || !concepto) {
+                alert('❌ Por favor complete todos los campos de la transferencia');
+                return;
+            }
+
+            if (cuentaOrigen === cuentaDestino) {
+                alert('❌ No puede transferir a la misma cuenta de origen');
+                return;
+            }
+
+            if (monto <= 0) {
+                alert('❌ El monto debe ser mayor a cero');
+                return;
+            }
+
+            // Verificar fondos disponibles (considerando fondos bloqueados)
+            const saldoDisponible = cuentas[cuentaOrigen].saldo - (cuentaOrigen === 'inovaGear' ? fondosBloqueados : 0);
+            if (cuentaOrigen !== 'banco' && monto > saldoDisponible) {
+                alert(`❌ Fondos insuficientes. Saldo disponible: $${saldoDisponible.toLocaleString('es-ES', { minimumFractionDigits: 2 })}`);
+                return;
+            }
+
+            // Realizar transferencia
+            cuentas[cuentaOrigen].saldo -= monto;
+            cuentas[cuentaDestino].saldo += monto;
+
+            // Registrar transacción
+            const fecha = new Date().toLocaleDateString('es-ES');
+            historialTransacciones.unshift({
+                fecha: fecha,
+                descripcion: `Transferencia: ${concepto}`,
+                tipo: "transferencia",
+                detalles: `${cuentas[cuentaOrigen].nombre} → ${cuentas[cuentaDestino].nombre}: $${monto.toLocaleString('es-ES', { minimumFractionDigits: 2 })}`
+            });
+
+            // Actualizar interfaz
+            actualizarSaldos();
+            actualizarHistorial();
+
+            // Mostrar confirmación
+            let mensaje = `✅ Transferencia realizada exitosamente\n💸 Monto: $${monto.toLocaleString('es-ES', { minimumFractionDigits: 2 })}\n📧 Concepto: ${concepto}`;
+
+            if (cuentas[cuentaOrigen].saldo < 0 && cuentaOrigen !== 'banco') {
+                mensaje += `\n⚠️ ALERTA: Cuenta en números negativos: $${cuentas[cuentaOrigen].saldo.toLocaleString('es-ES', { minimumFractionDigits: 2 })}`;
+            }
+
+            alert(mensaje);
+
+            // Limpiar formulario
+            document.getElementById('montoTransferencia').value = '';
+            document.getElementById('conceptoTransferencia').value = '';
+        }
+
+        // ===== SISTEMA DE CONTRATOS INTELIGENTES AVANZADOS =====
+        function mostrarSeccionContrato() {
+            const monto = document.getElementById('montoTransferencia').value;
+            const concepto = document.getElementById('conceptoTransferencia').value;
+
+            if (!monto || !concepto) {
+                alert('Complete el monto y concepto antes de crear un contrato');
+                return;
+            }
+
+            document.getElementById('seccionContrato').style.display = 'block';
+            document.getElementById('condicionesContrato').value = `Transferencia condicionada: ${concepto}. Fondos se liberarán tras verificación de cumplimiento.`;
+
+            // Establecer fecha de vencimiento a 30 días
+            const fechaVencimiento = new Date();
+            fechaVencimiento.setDate(fechaVencimiento.getDate() + 30);
+            document.getElementById('fechaVencimientoContrato').value = fechaVencimiento.toISOString().split('T')[0];
+        }
+
+        function ocultarSeccionContrato() {
+            document.getElementById('seccionContrato').style.display = 'none';
+        }
+
+        function crearContratoInteligente() {
+            const cuentaOrigen = document.getElementById('cuentaOrigen').value;
+            const cuentaDestino = document.getElementById('cuentaDestino').value;
+            const monto = parseFloat(document.getElementById('montoTransferencia').value);
+            const condiciones = document.getElementById('condicionesContrato').value;
+            const fechaVencimiento = document.getElementById('fechaVencimientoContrato').value;
+            const beneficiario = document.getElementById('beneficiarioContrato').value;
+            const empresaBeneficiaria = document.getElementById('empresaBeneficiaria').value;
+
+            if (!condiciones || !fechaVencimiento || !beneficiario || !empresaBeneficiaria) {
+                alert('Por favor complete todos los campos del contrato');
+                return;
+            }
+
+            // Verificar fondos disponibles
+            const saldoDisponible = cuentas[cuentaOrigen].saldo - fondosBloqueados;
+            if (cuentaOrigen !== 'banco' && monto > saldoDisponible) {
+                alert(`❌ Fondos insuficientes para bloquear. Saldo disponible: $${saldoDisponible.toLocaleString('es-ES', { minimumFractionDigits: 2 })}`);
+                return;
+            }
+
+            // Generar ID único para el contrato
+            const contratoId = 'CTR-' + Date.now();
+
+            // Crear contrato
+            contratoActivo = {
+                id: contratoId,
+                cuentaOrigen: cuentaOrigen,
+                cuentaDestino: cuentaDestino,
+                monto: monto,
+                condiciones: condiciones,
+                fechaVencimiento: fechaVencimiento,
+                beneficiario: beneficiario,
+                empresaBeneficiaria: empresaBeneficiaria,
+                fechaCreacion: new Date().toISOString().split('T')[0],
+                estado: 'FONDOS_BLOQUEADOS',
+                condicionesCumplidas: false,
+                evidencias: [],
+                intentos: 0,
+                fechaUltimaVerificacion: null
+            };
+
+            // Bloquear fondos
+            fondosBloqueados += monto;
+            diasRestantes = 10;
+            intentosVerificacion = 0;
+
+            // Registrar en historial
+            const fecha = new Date().toLocaleDateString('es-ES');
+            historialTransacciones.unshift({
+                fecha: fecha,
+                descripcion: `Contrato Inteligente Creado`,
+                tipo: "contrato",
+                detalles: `${cuentas[cuentaOrigen].nombre} → ${empresaBeneficiaria}: $${monto.toLocaleString('es-ES', { minimumFractionDigits: 2 })} | Condiciones: ${condiciones}`
+            });
+
+            // Actualizar interfaz
+            actualizarSaldos();
+            actualizarHistorial();
+            mostrarEstadoContrato();
+            iniciarContadorTiempo();
+            generarEnlacesAcceso();
+            ocultarSeccionContrato();
+
+            alert(`✅ Contrato inteligente creado exitosamente\n🔒 Fondos bloqueados: $${monto.toLocaleString('es-ES', { minimumFractionDigits: 2 })}\n📅 Vencimiento: ${fechaVencimiento}\n🔗 Enlaces de acceso generados\n⏰ Tiene 10 días para subir evidencias`);
+        }
+
+        function generarEnlacesAcceso() {
+            if (!contratoActivo) return;
+
+            const enlaceInovaGear = document.getElementById('enlaceInovaGear');
+            const enlaceEmpresaB = document.getElementById('enlaceEmpresaB');
+            const enlacesAcceso = document.getElementById('enlacesAcceso');
+
+            // Generar enlaces únicos que lleven directamente a la página de evidencias
+            const tokenInovaGear = btoa(`inovaGear-${contratoActivo.id}-${Date.now()}`);
+            const tokenEmpresaB = btoa(`empresaB-${contratoActivo.id}-${Date.now()}`);
+
+            const urlBase = window.location.href.split('?')[0];
+            // Los enlaces llevan directamente a la página de evidencias
+            const enlaceIG = `${urlBase}?pagina=evidencias&token=${tokenInovaGear}&contrato=${contratoActivo.id}`;
+            const enlaceEB = `${urlBase}?pagina=evidencias&token=${tokenEmpresaB}&contrato=${contratoActivo.id}`;
+
+            enlaceInovaGear.textContent = enlaceIG;
+            enlaceEmpresaB.textContent = enlaceEB;
+            enlacesAcceso.style.display = 'block';
+
+            // Guardar tokens en el contrato
+            contratoActivo.tokens = {
+                inovaGear: tokenInovaGear,
+                empresaB: tokenEmpresaB
+            };
+        }
+
+        function copiarEnlace(idElemento) {
+            const texto = document.getElementById(idElemento).textContent;
+            navigator.clipboard.writeText(texto).then(() => {
+                alert('✅ Enlace copiado al portapapeles');
+            });
+        }
+
+        function mostrarEstadoContrato() {
+            const estadoDiv = document.getElementById('estadoContratoActivo');
+            const infoDiv = document.getElementById('infoContratoActivo');
+
+            if (contratoActivo) {
+                estadoDiv.style.display = 'block';
+                infoDiv.innerHTML = `
+                            <p><strong>Contrato ID:</strong> ${contratoActivo.id}</p>
+                            <p><strong>Empresa Beneficiaria:</strong> ${contratoActivo.empresaBeneficiaria}</p>
+                            <p><strong>Beneficiario:</strong> ${contratoActivo.beneficiario}</p>
+                            <p><strong>Monto Bloqueado:</strong> $${contratoActivo.monto.toLocaleString('es-ES', { minimumFractionDigits: 2 })}</p>
+                            <p><strong>Estado:</strong> <span style="color: #856404; font-weight: bold;">🔒 BLOQUEADO</span></p>
+                            <p><strong>Fecha de Creación:</strong> ${contratoActivo.fechaCreacion}</p>
+                            <p><strong>Fecha de Vencimiento:</strong> ${contratoActivo.fechaVencimiento}</p>
+                            <p><strong>Condiciones:</strong> ${contratoActivo.condiciones}</p>
+                            <p><strong>Evidencias subidas:</strong> ${contratoActivo.evidencias.length} archivos</p>
+                            <p><strong>Intentos de verificación:</strong> ${contratoActivo.intentos}</p>
+                        `;
+            }
+        }
+
+        function iniciarContadorTiempo() {
+            const contador = document.getElementById('contadorTiempo');
+            contador.style.display = 'block';
+            actualizarContador();
+        }
+
+        function actualizarContador() {
+            const contador = document.getElementById('contadorTiempo');
+            const diasElement = document.getElementById('diasRestantes');
+
+            if (diasRestantes > 3) {
+                contador.className = 'contador-tiempo';
+            } else if (diasRestantes > 0) {
+                contador.className = 'contador-tiempo contador-urgente';
+            } else {
+                contador.innerHTML = '⏰ <strong>TIEMPO AGOTADO</strong> - Contrato en revisión';
+                contador.className = 'contador-tiempo contador-urgente';
+                verificarContratoAutomatico();
+                return;
+            }
+
+            diasElement.textContent = diasRestantes;
+        }
+
+        // ===== SISTEMA DE EVIDENCIAS =====
+        function subirEvidenciaModal(files) {
+            if (!files || files.length === 0) return;
+
+            const archivo = files[0];
+            const nombreArchivo = archivo.name;
+            const fecha = new Date().toLocaleString('es-ES');
+
+            // Agregar evidencia al contrato activo
+            if (contratoActivo) {
+                const nuevaEvidencia = {
+                    nombre: nombreArchivo,
+                    fecha: fecha,
+                    tipo: archivo.type,
+                    tamaño: (archivo.size / 1024 / 1024).toFixed(2) + ' MB',
+                    id: Date.now() + Math.random(),
+                    subidoPor: 'InovaGear Industries'
+                };
+
+                contratoActivo.evidencias.push(nuevaEvidencia);
+                actualizarListaArchivosModal();
+                mostrarNotificacion('✅ Evidencia subida correctamente', 'success');
+
+                // Actualizar estado del contrato
+                mostrarEstadoContrato();
+            }
+        }
+
+        function subirEvidenciaPagina(files) {
+            if (!files || files.length === 0) return;
+
+            const archivo = files[0];
+            const nombreArchivo = archivo.name;
+            const fecha = new Date().toLocaleString('es-ES');
+
+            // Determinar quién está subiendo la evidencia
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get('token');
+            let subidoPor = 'Empresa Externa';
+
+            if (token && contratoActivo && token === contratoActivo.tokens?.inovaGear) {
+                subidoPor = 'InovaGear Industries';
+            } else if (token && contratoActivo && token === contratoActivo.tokens?.empresaB) {
+                subidoPor = contratoActivo.empresaBeneficiaria;
+            }
+
+            // Agregar evidencia al contrato activo
+            if (contratoActivo) {
+                const nuevaEvidencia = {
+                    nombre: nombreArchivo,
+                    fecha: fecha,
+                    tipo: archivo.type,
+                    tamaño: (archivo.size / 1024 / 1024).toFixed(2) + ' MB',
+                    id: Date.now() + Math.random(),
+                    subidoPor: subidoPor
+                };
+
+                contratoActivo.evidencias.push(nuevaEvidencia);
+                actualizarListaArchivosPagina();
+                mostrarNotificacion(`✅ Evidencia subida correctamente por ${subidoPor}`, 'success');
+
+                // Actualizar estado del contrato
+                mostrarInfoContratoEvidencias();
+            }
+        }
+
+        function actualizarListaArchivosModal() {
+            const lista = document.getElementById('listaArchivosModal');
+            lista.innerHTML = '';
+
+            if (contratoActivo && contratoActivo.evidencias) {
+                contratoActivo.evidencias.forEach(archivo => {
+                    const div = document.createElement('div');
+                    div.className = 'archivo-item';
+                    div.innerHTML = `
+                                <div>
+                                    <strong>${archivo.nombre}</strong><br>
+                                    <small>Subido: ${archivo.fecha} | ${archivo.tamaño} | Por: ${archivo.subidoPor || 'InovaGear Industries'}</small>
+                                </div>
+                                <button class="btn btn-sm btn-danger" onclick="eliminarEvidencia(${archivo.id})">🗑️</button>
+                            `;
+                    lista.appendChild(div);
+                });
+            }
+        }
+
+        function actualizarListaArchivosPagina() {
+            const lista = document.getElementById('listaArchivosPagina');
+            lista.innerHTML = '';
+
+            if (contratoActivo && contratoActivo.evidencias) {
+                contratoActivo.evidencias.forEach(archivo => {
+                    const div = document.createElement('div');
+                    div.className = 'archivo-item';
+                    div.innerHTML = `
+                                <div>
+                                    <strong>${archivo.nombre}</strong><br>
+                                    <small>Subido: ${archivo.fecha} | ${archivo.tamaño} | Por: ${archivo.subidoPor || 'InovaGear Industries'}</small>
+                                </div>
+                            `;
+                    lista.appendChild(div);
+                });
+            }
+        }
+
+        function eliminarEvidencia(id) {
+            if (contratoActivo) {
+                contratoActivo.evidencias = contratoActivo.evidencias.filter(archivo => archivo.id !== id);
+                actualizarListaArchivosModal();
+                mostrarEstadoContrato();
+            }
+        }
+
+        // ===== PÁGINA DE EVIDENCIAS =====
+        function mostrarInfoContratoEvidencias() {
+            const info = document.getElementById('infoContratoEvidencias');
+
+            if (contratoActivo) {
+                // Determinar quién está accediendo
+                const urlParams = new URLSearchParams(window.location.search);
+                const token = urlParams.get('token');
+                let empresaAcceso = 'Empresa Externa';
+
+                if (token && contratoActivo.tokens) {
+                    if (token === contratoActivo.tokens.inovaGear) {
+                        empresaAcceso = 'InovaGear Industries';
+                    } else if (token === contratoActivo.tokens.empresaB) {
+                        empresaAcceso = contratoActivo.empresaBeneficiaria;
+                    }
+                }
+
+                info.innerHTML = `
+                        <div class="estado-contrato">
+                            <h3>Contrato: ${contratoActivo.id}</h3>
+                            <p><strong>Empresa Beneficiaria:</strong> ${contratoActivo.empresaBeneficiaria}</p>
+                            <p><strong>Beneficiario:</strong> ${contratoActivo.beneficiario}</p>
+                            <p><strong>Monto:</strong> $${contratoActivo.monto.toLocaleString('es-ES', { minimumFractionDigits: 2 })}</p>
+                            <p><strong>Condiciones:</strong> ${contratoActivo.condiciones}</p>
+                            <p><strong>Estado:</strong> <span style="color: #856404; font-weight: bold;">${contratoActivo.estado}</span></p>
+                            <p><strong>Usted está accediendo como:</strong> <span style="color: var(--info-teal); font-weight: bold;">${empresaAcceso}</span></p>
+                        </div>
+                    `;
+            }
+        }
+
+        function volverAlInicio() {
+            // Limpiar parámetros URL y mostrar página principal
+            window.history.replaceState({}, document.title, window.location.pathname);
+            document.getElementById('paginaEvidencias').style.display = 'none';
+            document.getElementById('paginaPrincipal').style.display = 'block';
+        }
+
+        // ===== VERIFICACIÓN DE ACCESO POR URL =====
+        function verificarAccesoPorURL() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const pagina = urlParams.get('pagina');
+            const token = urlParams.get('token');
+            const contratoId = urlParams.get('contrato');
+
+            if (pagina === 'evidencias' && token && contratoId) {
+                // Verificar si el contrato existe y el token es válido
+                if (contratoActivo && contratoActivo.id === contratoId) {
+                    if (contratoActivo.tokens &&
+                        (token === contratoActivo.tokens.inovaGear || token === contratoActivo.tokens.empresaB)) {
+
+                        // Ocultar página principal y mostrar página de evidencias
+                        document.getElementById('paginaPrincipal').style.display = 'none';
+                        document.getElementById('paginaEvidencias').style.display = 'block';
+
+                        mostrarInfoContratoEvidencias();
+                        actualizarListaArchivosPagina();
+                    } else {
+                        alert('❌ Token de acceso inválido');
+                        volverAlInicio();
+                    }
+                } else {
+                    alert('❌ Contrato no encontrado');
+                    volverAlInicio();
+                }
+            }
+        }
+
+        // ===== FUNCIONES DE LOS MODALES =====
+        function abrirModal(idModal) {
+            if (idModal === 'modalEvidencias' && contratoActivo) {
+                actualizarListaArchivosModal();
+            }
+            document.getElementById(idModal).style.display = 'flex';
+        }
+
+        function cerrarModal(idModal) {
+            document.getElementById(idModal).style.display = 'none';
+        }
+
+        // Cerrar modal al hacer clic fuera del contenido
+        window.onclick = function (event) {
+            const modals = document.getElementsByClassName('modal');
+            for (let modal of modals) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            }
+        }
+
+        // ===== FUNCIONES DE ADMINISTRACIÓN =====
+        function guardarConfiguracion() {
+            const configBackup = document.getElementById('configBackup').value;
+            const nivelAuditoria = document.getElementById('nivelAuditoria').value;
+            const seguridadNivel = document.getElementById('seguridadNivel').value;
+            const retencionDatos = document.getElementById('retencionDatos').value;
+
+            alert(`✅ Configuración guardada exitosamente:\n\n📊 Backup: ${configBackup}\n🔍 Auditoría: ${nivelAuditoria}\n🛡️ Seguridad: ${seguridadNivel}\n💾 Retención: ${retencionDatos}`);
+        }
+
+        function realizarBackup() {
+            alert('✅ Backup del sistema realizado exitosamente\n📅 Fecha: ' + new Date().toLocaleString('es-ES'));
+        }
+
+        function generarReporte() {
+            alert('✅ Reporte del sistema generado exitosamente\n📊 Se ha creado un reporte completo del sistema');
+        }
+
+        function exportarDatos() {
+            alert('✅ Datos exportados exitosamente\n💾 Los datos del sistema han sido exportados en formato CSV');
+        }
+
+        // ===== VERIFICACIÓN DE CONTRATO =====
+        function verificarCondicionesContrato() {
+            if (!contratoActivo) {
+                alert('No hay un contrato activo para verificar');
+                return;
+            }
+
+            intentosVerificacion++;
+            contratoActivo.intentos = intentosVerificacion;
+            contratoActivo.fechaUltimaVerificacion = new Date().toISOString().split('T')[0];
+
+            // Verificar si hay evidencias suficientes
+            if (contratoActivo.evidencias.length === 0) {
+                mostrarNotificacionContrato('❌ No se han subido evidencias. Por favor suba documentos que demuestren el cumplimiento.', 'error');
+                return;
+            }
+
+            // Simular verificación (60% de probabilidad de éxito en primer intento)
+            const probabilidadExito = Math.max(0.6 - (intentosVerificacion * 0.2), 0.1);
+            const condicionesCumplidas = Math.random() < probabilidadExito;
+
+            if (condicionesCumplidas) {
+                ejecutarContratoExitoso();
+            } else {
+                manejarContratoFallido();
+            }
+        }
+
+        function ejecutarContratoExitoso() {
+            // Ejecutar contrato - transferir fondos
+            cuentas[contratoActivo.cuentaOrigen].saldo -= contratoActivo.monto;
+            cuentas[contratoActivo.cuentaDestino].saldo += contratoActivo.monto;
+            fondosBloqueados -= contratoActivo.monto;
+
+            contratoActivo.estado = 'FONDOS_LIBERADOS';
+            contratoActivo.condicionesCumplidas = true;
+            contratoActivo.fechaLiberacion = new Date().toISOString().split('T')[0];
+
+            // Registrar en historial
+            const fecha = new Date().toLocaleDateString('es-ES');
+            historialTransacciones.unshift({
+                fecha: fecha,
+                descripcion: `Contrato Ejecutado Exitosamente`,
+                tipo: "contrato-ejecutado",
+                detalles: `${cuentas[contratoActivo.cuentaOrigen].nombre} → ${contratoActivo.empresaBeneficiaria}: $${contratoActivo.monto.toLocaleString('es-ES', { minimumFractionDigits: 2 })} | Condiciones verificadas | Evidencias: ${contratoActivo.evidencias.length} archivos`
+            });
+
+            actualizarSaldos();
+            actualizarHistorial();
+            document.getElementById('estadoContratoActivo').classList.add('contrato-cumplido');
+            document.getElementById('contadorTiempo').style.display = 'none';
+
+            mostrarNotificacionContrato('🎉 ¡Contrato ejecutado exitosamente! Los fondos han sido transferidos.', 'success');
+            notificarAmbasPartes('✅ CONTRATO CUMPLIDO', `El contrato con ${contratoActivo.empresaBeneficiaria} ha sido ejecutado exitosamente. Fondos transferidos: $${contratoActivo.monto.toLocaleString('es-ES', { minimumFractionDigits: 2 })}. Evidencias verificadas: ${contratoActivo.evidencias.length} archivos`);
+        }
+
+        function manejarContratoFallido() {
+            if (intentosVerificacion >= 2) {
+                // Contrato fallido definitivamente - reembolsar fondos
+                fondosBloqueados -= contratoActivo.monto;
+                contratoActivo.estado = 'FALLIDO';
+
+                // Registrar en historial
+                const fecha = new Date().toLocaleDateString('es-ES');
+                historialTransacciones.unshift({
+                    fecha: fecha,
+                    descripcion: `Contrato Fallido - Fondos Reembolsados`,
+                    tipo: "contrato-fallido",
+                    detalles: `Contrato con ${contratoActivo.empresaBeneficiaria} falló | Monto reembolsado: $${contratoActivo.monto.toLocaleString('es-ES', { minimumFractionDigits: 2 })} | Evidencias insuficientes: ${contratoActivo.evidencias.length} archivos`
+                });
+
+                actualizarSaldos();
+                actualizarHistorial();
+                document.getElementById('estadoContratoActivo').classList.add('contrato-fallido');
+                document.getElementById('contadorTiempo').style.display = 'none';
+
+                mostrarNotificacionContrato('❌ Contrato fallido. Los fondos han sido reembolsados al originador.', 'error');
+                notificarAmbasPartes('❌ CONTRATO FALLIDO', `El contrato con ${contratoActivo.empresaBeneficiaria} ha fallado después de ${intentosVerificacion} intentos. Fondos reembolsados: $${contratoActivo.monto.toLocaleString('es-ES', { minimumFractionDigits: 2 })}. Evidencias insuficientes: ${contratoActivo.evidencias.length} archivos`);
+            } else {
+                // Dar oportunidad de corregir
+                diasRestantes = 10;
+                actualizarContador();
+                mostrarNotificacionContrato(`⚠️ Verificación fallida (Intento ${intentosVerificacion}/2). Tiene 10 días para subir nuevas evidencias.`, 'warning');
+                notificarAmbasPartes('⚠️ CONTRATO REQUIERE CORRECCIÓN', `El contrato con ${contratoActivo.empresaBeneficiaria} requiere correcciones. Tiene 10 días para subir nuevas evidencias. Evidencias actuales: ${contratoActivo.evidencias.length} archivos`);
+            }
+        }
+
+        function verificarContratoAutomatico() {
+            if (contratoActivo && contratoActivo.estado === 'FONDOS_BLOQUEADOS' && diasRestantes <= 0) {
+                verificarCondicionesContrato();
+            }
+        }
+
+        function notificarAmbasPartes() {
+            if (!contratoActivo) return;
+
+            const notificaciones = document.getElementById('notificacionesContrato');
+            const notificacion = document.createElement('div');
+            notificacion.className = 'notificacion';
+            notificacion.innerHTML = `
+                        <strong>📢 Notificación Enviada</strong><br>
+                        Ambas partes han sido notificadas sobre el estado del contrato.<br>
+                        <small>Fecha: ${new Date().toLocaleString('es-ES')}</small>
+                    `;
+            notificaciones.appendChild(notificacion);
+
+            mostrarNotificacion('📢 Notificación enviada a ambas partes', 'info');
+        }
+
+        function mostrarNotificacionContrato(mensaje, tipo) {
+            const notificaciones = document.getElementById('notificacionesContrato');
+            const notificacion = document.createElement('div');
+            notificacion.className = `notificacion ${tipo === 'error' ? 'notificacion-alerta' : ''}`;
+            notificacion.innerHTML = mensaje;
+            notificaciones.appendChild(notificacion);
+        }
+
+        function mostrarNotificacion(mensaje, tipo) {
+            alert(mensaje);
+        }
+
+        function cancelarContrato() {
+            if (!contratoActivo) return;
+
+            if (confirm('¿Está seguro de que desea cancelar el contrato? Los fondos bloqueados serán liberados.')) {
+                fondosBloqueados -= contratoActivo.monto;
+
+                // Registrar cancelación
+                const fecha = new Date().toLocaleDateString('es-ES');
+                historialTransacciones.unshift({
+                    fecha: fecha,
+                    descripcion: `Contrato Cancelado`,
+                    tipo: "contrato-cancelado",
+                    detalles: `Contrato con ${contratoActivo.empresaBeneficiaria} cancelado | Monto: $${contratoActivo.monto.toLocaleString('es-ES', { minimumFractionDigits: 2 })} | Evidencias descartadas: ${contratoActivo.evidencias.length} archivos`
+                });
+
+                contratoActivo = null;
+                document.getElementById('estadoContratoActivo').style.display = 'none';
+                document.getElementById('contadorTiempo').style.display = 'none';
+                actualizarSaldos();
+                actualizarHistorial();
+
+                mostrarNotificacion('✅ Contrato cancelado. Fondos bloqueados han sido liberados.', 'success');
+            }
+        }
+
+        // ===== FUNCIONES DE ACTUALIZACIÓN =====
+        function actualizarSaldos() {
+            // Actualizar saldo de InovaGear
+            const saldoInovaGear = document.getElementById('saldoInovaGear');
+            const saldoDisponible = cuentas.inovaGear.saldo - fondosBloqueados;
+            saldoInovaGear.textContent = `$${cuentas.inovaGear.saldo.toLocaleString('es-ES', { minimumFractionDigits: 2 })}`;
+
+            if (fondosBloqueados > 0) {
+                saldoInovaGear.innerHTML += `<br><small style="font-size: 0.6em; opacity: 0.8;">(Bloqueado: $${fondosBloqueados.toLocaleString('es-ES', { minimumFractionDigits: 2 })})</small>`;
+            }
+
+            // Aplicar estilo si está en negativo
+            if (cuentas.inovaGear.saldo < 0) {
+                saldoInovaGear.classList.add('saldo-negativo');
+            } else {
+                saldoInovaGear.classList.remove('saldo-negativo');
+            }
+
+            // Actualizar opciones del select
+            Object.keys(cuentas).forEach(key => {
+                const option = document.querySelector(`option[value="${key}"]`);
+                if (option) {
+                    const saldoFormateado = cuentas[key].saldo.toLocaleString('es-ES', { minimumFractionDigits: 2 });
+                    option.textContent = `${cuentas[key].nombre} ($${saldoFormateado})`;
+                }
+            });
+
+            // Añadir animación
+            saldoInovaGear.classList.add('saldo-update');
+            setTimeout(() => {
+                saldoInovaGear.classList.remove('saldo-update');
+            }, 500);
+        }
+
+        function actualizarSaldoOrigen() {
+            const cuentaOrigen = document.getElementById('cuentaOrigen').value;
+            const saldoDiv = document.getElementById('saldoActualOrigen');
+
+            if (cuentaOrigen && cuentas[cuentaOrigen]) {
+                const saldo = cuentas[cuentaOrigen].saldo;
+                const saldoDisponible = saldo - (cuentaOrigen === 'inovaGear' ? fondosBloqueados : 0);
+                saldoDiv.textContent = `Saldo disponible: $${saldoDisponible.toLocaleString('es-ES', { minimumFractionDigits: 2 })}`;
+                saldoDiv.style.color = saldoDisponible >= 0 ? '#28a745' : '#dc3545';
+            } else {
+                saldoDiv.textContent = '';
+            }
+        }
+
+        function actualizarHistorial() {
+            const lista = document.getElementById('listaTransacciones');
+            lista.innerHTML = '';
+
+            historialTransacciones.forEach(transaccion => {
+                const div = document.createElement('div');
+                let clase = 'transaccion-item';
+                if (transaccion.tipo === 'contrato') clase += ' transaccion-contrato';
+                if (transaccion.tipo === 'contrato-cancelado' || transaccion.tipo === 'contrato-fallido') clase += ' transaccion-negativa';
+
+                div.className = clase;
+                div.innerHTML = `
+                            <strong>${transaccion.fecha} - ${transaccion.descripcion}</strong><br>
+                            <span>${transaccion.detalles}</span>
+                        `;
+                lista.appendChild(div);
+            });
+        }
+
+        // Simular paso del tiempo (para demo)
+        setInterval(() => {
+            if (diasRestantes > 0 && contratoActivo && contratoActivo.estado === 'FONDOS_BLOQUEADOS') {
+                diasRestantes--;
+                actualizarContador();
+            }
+        }, 30000); // 30 segundos = 1 día en demo
+
+        // ===== INICIALIZACIÓN =====
+        document.addEventListener('DOMContentLoaded', function () {
+            actualizarSaldos();
+            actualizarHistorial();
+            verificarAccesoPorURL();
+            console.log('✅ InovaGear Industries - Sistema con contratos avanzados inicializado');
+        });
+    </script>
+</body>
+</html>
